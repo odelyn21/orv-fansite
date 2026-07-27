@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Ways to Survive in a Ruined World, a Fan Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Cormorant+Garamond:wght@300;500;700&family=Inter&family=Inter:wght@300;400;500;600&family=JetBrains+Mono&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --void: #0a0612;
+    --void-2: #14092a;
+    --surface: #1a0f2e;
+    --surface-2: #241640;
+    --gold: #e8d896;
+    --gold-dim: #a89562;
+    --lavender: #b8a4e6;
+    --moon: #f2e8ff;
+    --dust: #8a7ba8;
+    --deep-purple: #7c4dff;
+    --danger: #ff5b7a;
+    --hair: rgba(232, 216, 150, 0.15);
+    --hair-strong: rgba(232, 216, 150, 0.35);
+  }
+
+  body {
+    background: var(--void);
+    color: var(--moon);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* star field background */
+  .stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 4s infinite ease-in-out;
+  }
+
+  .star.big { width: 3px; height: 3px; opacity: 0.9; }
+  .star.tiny { width: 1px; height: 1px; opacity: 0.4; }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.9; }
+  }
+
+  /* main container */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* top nav */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(10, 6, 18, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--hair);
+    z-index: 100;
+    padding: 1.25rem 0;
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .brand-mark {
+    display: inline-block;
+    margin-right: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links button {
+    background: none;
+    border: none;
+    color: var(--dust);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .nav-links button:hover,
+  .nav-links button.active {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  /* system message aesthetic */
+  .system-msg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--hair);
+    display: inline-block;
+    margin-bottom: 2rem;
+    background: rgba(232, 216, 150, 0.03);
+  }
+
+  .system-msg.danger {
+    color: var(--danger);
+    border-color: rgba(255, 91, 122, 0.3);
+    background: rgba(255, 91, 122, 0.05);
+  }
+
+  /* page sections */
+  .page {
+    display: none;
+    padding: 5rem 0 8rem;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .page.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 0 4rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    color: var(--moon);
+    margin: 1.5rem auto 2rem;
+    max-width: 900px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .hero .tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--lavender);
+    max-width: 640px;
+    margin: 3rem auto 0;
+    line-height: 1.6;
+    padding: 0 1rem;
+  }
+
+  .quote::before,
+  .quote::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+    margin: 1.5rem auto;
+  }
+
+  .cite {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dust);
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+  }
+
+  /* about section */
+  .about {
+    padding: 5rem 0;
+    border-top: 1px solid var(--hair);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .about p {
+    color: var(--lavender);
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about p strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* section headings */
+  .section-head {
+    margin-bottom: 4rem;
+  }
+
+  .section-head h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--moon);
+    margin-top: 0.5rem;
+  }
+
+  .section-head p {
+    color: var(--dust);
+    font-size: 1rem;
+    max-width: 600px;
+    margin-top: 1rem;
+  }
+
+  /* CHARACTERS */
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .char-card {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    padding: 2rem;
+    position: relative;
+    transition: border-color 0.4s, transform 0.4s;
+    overflow: hidden;
+  }
+
+  .char-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+
+  .char-card:hover {
+    border-color: var(--hair-strong);
+    transform: translateY(-4px);
+  }
+
+  .char-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .char-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  .char-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--moon);
+    margin-bottom: 0.3rem;
+    line-height: 1.1;
+  }
+
+  .char-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .char-desc {
+    color: var(--lavender);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .char-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    border-top: 1px solid var(--hair);
+    padding-top: 1rem;
+    margin-top: auto;
+  }
+
+  /* SCENARIOS */
+  .scenario-list {
+    margin-top: 3rem;
+  }
+
+  .scenario {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--hair);
+    transition: padding 0.3s;
+  }
+
+  .scenario:hover {
+    padding-left: 1rem;
+  }
+
+  .scenario-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+  }
+
+  .scenario-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--moon);
+    font-weight: 500;
+  }
+
+  .scenario-name span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--dust);
+    font-weight: 300;
+    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .scenario-clear {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--hair-strong);
+  }
+
+  /* GALLERY */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .gallery-item {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s;
+    cursor: pointer;
+  }
+
+  .gallery-item:hover {
+    border-color: var(--gold-dim);
+  }
+
+  .gallery-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dust);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-align: center;
+    padding: 1rem;
+    text-transform: uppercase;
+  }
+
+  .gallery-placeholder .scene-tag {
+    font-size: 0.6rem;
+    color: var(--gold-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .gallery-placeholder .prompt-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--lavender);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* footer */
+  footer {
+    border-top: 1px solid var(--hair);
+    padding: 3rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--dust);
+    text-transform: uppercase;
+    margin-top: 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer .made-by {
+    color: var(--gold-dim);
+    margin-top: 0.5rem;
+  }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    .nav-links { gap: 1.2rem; }
+    .nav-links button { font-size: 0.7rem; }
+    .brand { font-size: 1.1rem; }
+    .scenario { grid-template-columns: 60px 1fr; }
+    .scenario-clear { grid-column: 1 / -1; justify-self: start; }
+    .section-head h2 { font-size: 2.2rem; }
+    .container { padding: 0 1.2rem; }
+    .nav-inner { padding: 0 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="brand-mark">✦</span>
+      Star Stream
+    </div>
+    <ul class="nav-links">
+      <li><button data-page="home" class="active">Home</button></li>
+      <li><button data-page="characters">Characters</button></li>
+      <li><button data-page="scenarios">Scenarios</button></li>
+      <li><button data-page="gallery">Gallery</button></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HOME -->
+  <section class="page active" id="home">
+    <div class="hero">
+      <div class="tagline">Constellation Broadcast, Channel 001</div>
+      <h1>Only one reader has finished this story. His name is <em>Kim Dokja</em>.</h1>
+      <p class="quote">
+        "This story… only I have read it."
+        <span class="cite">Omniscient Reader's Viewpoint, Prologue</span>
+      </p>
+    </div>
+
+    <div class="about">
+      <div class="system-msg">Broadcast Loading</div>
+      <p>
+        Ten years ago, an average office worker named <strong>Kim Dokja</strong> started reading a web novel called Three Ways to Survive in a Ruined World. He read it until the very last chapter, alone, all 3,149 of them.
+      </p>
+      <p>
+        Then reality became the novel. The scenarios began. And suddenly, being the only reader who knew what happens next was the most dangerous power in the world.
+      </p>
+      <p>
+        This is a fan site for the constellations, sponsors, incarnations, and the story only he knows how to survive.
+      </p>
+    </div>
+  </section>
+
+  <!-- CHARACTERS -->
+  <section class="page" id="characters">
+    <div class="section-head">
+      <div class="system-msg">Incarnation Registry</div>
+      <h2>Those who bear the scenario.</h2>
+      <p>The main characters of the story, each carrying a fate they cannot outrun and a role they did not choose.</p>
+    </div>
+
+    <div class="char-grid">
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 001</div>
+        <div class="char-name">Kim Dokja</div>
+        <div class="char-title">The Reader Who Knows the End</div>
+        <p class="char-desc">The sole reader who finished the novel before the world became it. His omniscience is his weapon and his curse. Sponsored by the strangest constellation of all.</p>
+        <div class="char-tag">Sponsor, Secretive Plotter</div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 002</div>
+        <div class="char-name">Yoo Joonghyuk</div>
+        <div class="char-title">The Regressor</div>
+        <p class="char-desc">Has lived and died more times than anyone can count. Cold, ruthless, and burdened by every timeline. The novel's original protagonist, though he does not know it.</p>
+        <div class="char-tag">Sponsor, Demon King of Salvation</div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 003</div>
+        <div class="char-name">Han Sooyoung</div>
+        <div class="char-title">The Writer of the Ruined World</div>
+        <p class="char-desc">Chaotic, brilliant, and impossibly stubborn. She wrote a novel once. Then the novel wrote her back. Cannot stand Kim Dokja. Cannot stop helping him either.</p>
+        <div class="char-tag">Sponsor, Author of the World Line</div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 004</div>
+        <div class="char-name">Yoo Sangah</div>
+        <div class="char-title">The One Who Stays</div>
+        <p class="char-desc">Kim Dokja's coworker before the world ended. Kind in a way that becomes terrifying under pressure. The moral compass everyone leans on and no one deserves.</p>
+        <div class="char-tag">Sponsor, Prisoner of the Golden Headband</div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 005</div>
+        <div class="char-name">Jung Heewon</div>
+        <div class="char-title">The Fastest Blade</div>
+        <p class="char-desc">A former office worker with a talent for surviving that even she does not fully understand. Wields the Impaler of the Red Wall. Constantly one bad day away from snapping.</p>
+        <div class="char-tag">Sponsor, Judge of Fire</div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-number">Incarnation 006</div>
+        <div class="char-name">Lee Hyunsung</div>
+        <div class="char-title">The Shield That Bears All</div>
+        <p class="char-desc">A soldier who defends whoever needs it most. His faith is genuine, his loyalty absolute. The party's heart, no matter how many scenarios try to break it.</p>
+        <div class="char-tag">Sponsor, Guardian of the Golden Rule</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section class="page" id="scenarios">
+    <div class="section-head">
+      <div class="system-msg danger">Warning, Scenario Data Classified</div>
+      <h2>The scenarios that unmade the world.</h2>
+      <p>Each scenario is a stage in the constellation's play. Clear it, or become part of the audience below.</p>
+    </div>
+
+    <div class="scenario-list">
+      <div class="scenario">
+        <div class="scenario-num">Prologue</div>
+        <div class="scenario-name">
+          The Story That Only I Know
+          <span>Kim Dokja finishes the last chapter. The novel begins.</span>
+        </div>
+        <div class="scenario-clear">Cleared</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 01</div>
+        <div class="scenario-name">
+          Kill the Cockroach
+          <span>The first tutorial. Simple. Impossible. The rules are set.</span>
+        </div>
+        <div class="scenario-clear">Cleared</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 02</div>
+        <div class="scenario-name">
+          The Small Grail Scenario
+          <span>Survive the subway. Choose your alliances. Do not trust the rules.</span>
+        </div>
+        <div class="scenario-clear">Cleared</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 05</div>
+        <div class="scenario-name">
+          Nightmare Assembly
+          <span>The city becomes a battlefield of prophecies. The first regressor appears.</span>
+        </div>
+        <div class="scenario-clear">Cleared</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 10</div>
+        <div class="scenario-name">
+          The Disaster of Rebirth
+          <span>Old gods stir. The scenario forgets its own rules. Kim Dokja pays a price.</span>
+        </div>
+        <div class="scenario-clear">Cleared</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 41</div>
+        <div class="scenario-name">
+          Nebula Feast
+          <span>Constellations gather. Sponsorships are traded. A stage becomes a slaughter.</span>
+        </div>
+        <div class="scenario-clear">Ongoing</div>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-num">Scenario 100</div>
+        <div class="scenario-name">
+          The Last and Only Scenario
+          <span>The novel's final chapter. Only Kim Dokja knows what it says.</span>
+        </div>
+        <div class="scenario-clear">Sealed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="page" id="gallery">
+    <div class="section-head">
+      <div class="system-msg">Visual Archive</div>
+      <h2>Scenes from the Star Stream.</h2>
+      <p>Storyboard frames rendered by the constellation's eye. Replace these with the images your workflow generated.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 001</div>
+          The Reader's Room
+          <div class="prompt-hint">A boy hunched over a glowing laptop, rain against the window.</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 002</div>
+          The World Update
+          <div class="prompt-hint">Text bleeds off the monitor. The walls glitch red.</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 003</div>
+          The Constellations Descend
+          <div class="prompt-hint">Sky opens over Seoul. Star silhouettes point at him.</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 004</div>
+          Sponsor Acceptance
+          <div class="prompt-hint">Pillars of starlight converge. A sigil ignites.</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 005</div>
+          Add Your Own
+          <div class="prompt-hint">Drop your next generated image here.</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="scene-tag">Scene 006</div>
+          Add Your Own
+          <div class="prompt-hint">The story is only beginning.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div>Star Stream Fan Site, Built by Odelyn</div>
+  <div class="made-by">A tribute to Omniscient Reader's Viewpoint</div>
+</footer>
+
+<script>
+  // generate star field
+  const starsContainer = document.getElementById('stars');
+  const starCount = 80;
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    const size = Math.random();
+    star.className = 'star' + (size > 0.85 ? ' big' : size < 0.3 ? ' tiny' : '');
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 4 + 's';
+    star.style.animationDuration = (3 + Math.random() * 4) + 's';
+    starsContainer.appendChild(star);
+  }
+
+  // page navigation
+  const buttons = document.querySelectorAll('.nav-links button');
+  const pages = document.querySelectorAll('.page');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.page;
+      buttons.forEach(b => b.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
